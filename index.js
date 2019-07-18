@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 'use strict';
 
 function getDogImage(breed) {
@@ -5,9 +6,12 @@ function getDogImage(breed) {
     .then(response => response.json())
     .then(responseJson => {
       console.log(responseJson);
-      updateHtml(responseJson.message);
-    });
-  //.catch(error => alert('Something went wrong. Try again later.'));
+      if (responseJson.status === 'success') updateHtml(responseJson.message);
+      else updateErrorHtml(responseJson.message);
+    })
+  .catch(error => {
+    updateErrorHtml(error.message);
+  });
 }
 
 function main() {
@@ -17,6 +21,10 @@ function main() {
     console.log(breed);
     getDogImage(breed.toLowerCase());
   });
+}
+
+function updateErrorHtml(errorMsg) {
+  $('.results').html(`<p>${errorMsg}</p>`);
 }
 
 function updateHtml(url) {
